@@ -47,21 +47,29 @@ const movieSchema = new mongoose.Schema({
       message: 'Укажите ссылку на миниатюру постера к фильму',
     },
   },
+  // owner: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: 'user',
+  //   required: true,
+  // },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+    type: String,
     required: true,
   },
+//   movieId: {
+//   type: mongoose.Schema.Types.ObjectId,
+//     ref: 'movie',
+//     required: true,
+// },
   movieId: {
-  type: mongoose.Schema.Types.ObjectId,
-    ref: 'movie',
+  type: String,
     required: true,
 },
   nameRU: {
     type: String,
     require: true,
     validate: {
-      validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU'),
+      validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU', { ignore: " -:" }),
       message: 'Введено некорректное русскоязычное название фильма',
     },
   },
@@ -69,10 +77,10 @@ const movieSchema = new mongoose.Schema({
     type: String,
     require: true,
     validate: {
-      validator: (val: string) => validator.isAlphanumeric(val, 'en-US'),
+      validator: (val: string) => validator.isAlphanumeric(val, 'en-US', { ignore: " -:" }),
       message: 'Введено некорректное англоязычное название фильма',
     },
   }
 })
 
-export default mongoose.model<TMovie>('user', movieSchema);
+export default mongoose.model<TMovie>('movie', movieSchema);
