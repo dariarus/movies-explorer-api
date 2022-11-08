@@ -7,7 +7,11 @@ import NotFoundError from '../errors/error-404-not-found';
 const NOT_FOUND_MESSAGE = 'Такой пользователь не существует';
 
 // Вернуть авторизованного пользователя
-export const getUser = (req: Request & { user?: JwtPayload | string }, res: Response, next: NextFunction) => {
+export const getUser = (
+  req: Request & { user?: JwtPayload | string },
+  res: Response,
+  next: NextFunction,
+) => {
   User.findById(req.user)
     .then((user) => {
       if (!user) {
@@ -19,6 +23,7 @@ export const getUser = (req: Request & { user?: JwtPayload | string }, res: Resp
     .catch(next);
 };
 
+// TODO: прикрутить изменение пароля
 // Обновить информацию о пользователе
 export const updateUser = (
   req: Request & { user?: JwtPayload | string },

@@ -1,5 +1,5 @@
-import {Request, Response, NextFunction} from 'express';
-import {JwtPayload} from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import NotFoundError from '../errors/error-404-not-found';
 
@@ -23,10 +23,10 @@ export const getMovies = (
       res.send(movies);
     })
     .catch(next);
-}
+};
 
-// Создать новый фильм
-export const createMovie = (
+// Сохранить фильм к себе (лайкнуть)
+export const saveMovie = (
   req: Request & { user?: JwtPayload | string },
   res: Response,
   next: NextFunction,
@@ -57,8 +57,7 @@ export const createMovie = (
     movieId,
     nameRU,
     nameEN,
-   // owner: (req.user as JwtPayload)._id,
-    owner: "1"
+    owner: (req.user as JwtPayload)._id,
   })
     .then((movie) => {
       res.send(movie);
@@ -66,6 +65,7 @@ export const createMovie = (
     .catch(next);
 };
 
+// Удалить фильм из понравившихся (дизлайкнуть)
 export const unsaveMovie = (
   req: Request & { user?: JwtPayload | string },
   res: Response,

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
-import {TMovie, TUser} from '../services/types';
+import { TMovie, TUser } from '../services/types';
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -47,29 +47,25 @@ const movieSchema = new mongoose.Schema({
       message: 'Укажите ссылку на миниатюру постера к фильму',
     },
   },
-  // owner: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'user',
-  //   required: true,
-  // },
   owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,
+  },
+  //   movieId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //     ref: 'movie',
+  //     required: true,
+  // },
+  movieId: {
     type: String,
     required: true,
   },
-//   movieId: {
-//   type: mongoose.Schema.Types.ObjectId,
-//     ref: 'movie',
-//     required: true,
-// },
-  movieId: {
-  type: String,
-    required: true,
-},
   nameRU: {
     type: String,
     require: true,
     validate: {
-      validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU', { ignore: " -:" }),
+      validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU', { ignore: ' -:' }),
       message: 'Введено некорректное русскоязычное название фильма',
     },
   },
@@ -77,10 +73,10 @@ const movieSchema = new mongoose.Schema({
     type: String,
     require: true,
     validate: {
-      validator: (val: string) => validator.isAlphanumeric(val, 'en-US', { ignore: " -:" }),
+      validator: (val: string) => validator.isAlphanumeric(val, 'en-US', { ignore: ' -:' }),
       message: 'Введено некорректное англоязычное название фильма',
     },
-  }
-})
+  },
+});
 
 export default mongoose.model<TMovie>('movie', movieSchema);
