@@ -30,11 +30,11 @@ export const updateUser = (
   res: Response,
   next: NextFunction,
 ) => {
-  const { name, email } = req.body;
+  const { name, email, password } = req.body;
 
   return User.findByIdAndUpdate(
     (req.user as JwtPayload)._id,
-    { name, email },
+    { name, email, password },
     { new: true, runValidators: true },
   )
     .then((user) => {
