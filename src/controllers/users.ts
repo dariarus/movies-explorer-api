@@ -23,7 +23,6 @@ export const getUser = (
     .catch(next);
 };
 
-// TODO: прикрутить изменение пароля
 // Обновить информацию о пользователе
 export const updateUser = (
   req: Request & { user?: JwtPayload | string },

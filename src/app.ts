@@ -14,8 +14,9 @@ import { createUser, login, logout } from './controllers/auth';
 import NotFoundError from './errors/error-404-not-found';
 import BadRequestError from './errors/error-400-bad-request';
 import UnauthorizedError from './errors/error-401-unauthorized';
-// import UserRightsError from './errors/error-403';
+import ForbiddenChangesError from './errors/error-403-forbidden';
 import UniqueFieldConflict from './errors/error-409-conflict';
+import InternalServerError from './errors/error-500-internal-server-error';
 
 require('dotenv').config();
 
@@ -66,8 +67,8 @@ const runApp = () => {
     let message;
     if (err instanceof NotFoundError
      || err instanceof BadRequestError
-     || err instanceof UnauthorizedError) {
-      // || err instanceof UserRightsError) {
+     || err instanceof UnauthorizedError
+     || err instanceof ForbiddenChangesError) {
       ({ statusCode, message } = err);
     } else if (err instanceof mongoose.Error.CastError
       || err instanceof mongoose.Error.ValidationError) {
@@ -80,8 +81,8 @@ const runApp = () => {
       statusCode = UniqueFieldConflict.DEFAULT_STATUS_CODE;
       message = UniqueFieldConflict.DEFAULT_MESSAGE;
     } else {
-      statusCode = 500;
-      message = 'На сервере произошла ошибка';
+      statusCode = InternalServerError.DEFAULT_STATUS_CODE;
+      message = InternalServerError.DEFAULT_MESSAGE;
     }
     res
       .status(statusCode)

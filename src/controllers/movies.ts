@@ -1,13 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
-import mongoose from 'mongoose';
 import NotFoundError from '../errors/error-404-not-found';
 
 import Movie from '../models/movies';
-import UnauthorizedError from '../errors/error-403';
+import ForbiddenChangesError from '../errors/error-403-forbidden';
 
 const NOT_FOUND_MESSAGE = 'Такой фильм не найден';
-const UNAUTHORIZED_MESSAGE = 'Авторизируйтесь, чтобы удалять сохраненные фильмы';
 
 // Вернуть сохраненные пользователем фильмы
 export const getMovies = (
@@ -78,7 +76,7 @@ export const unsaveMovie = (
         return;
       }
       if (String(movie.owner) !== (req.user as JwtPayload)._id) {
-        next(new UnauthorizedError(UNAUTHORIZED_MESSAGE));
+        next(new ForbiddenChangesError());
         return;
       }
       movie.remove().then(() => res.send(movie)).catch(next);
