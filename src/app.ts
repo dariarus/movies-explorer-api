@@ -18,6 +18,8 @@ import ForbiddenChangesError from './errors/error-403-forbidden';
 import UniqueFieldConflict from './errors/error-409-conflict';
 import InternalServerError from './errors/error-500-internal-server-error';
 
+import { requestLogger, errorLogger } from './middlewares/logger';
+
 require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
@@ -28,6 +30,9 @@ const runApp = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
+
+  // Логер запросов до всех роутов
+  app.use(requestLogger);
 
   // Роуты регистрации и авторизации
   app.post('/signup', celebrate({
@@ -51,6 +56,9 @@ const runApp = () => {
   app.use('/users', usersRouter);
   app.use('/movies', moviesRouter);
   app.post('/signout', logout);
+
+  // Логер ошибок после роутов и до обработки ошибок
+  app.use(errorLogger);
 
   // Обработчик ошибок celebrate
   app.use(errors());
