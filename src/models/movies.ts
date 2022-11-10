@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
-import { TMovie, TUser } from '../services/types';
+import { TMovie } from '../services/types';
 
 const movieSchema = new mongoose.Schema({
   country: {
