@@ -11,14 +11,9 @@ import usersRouter from './routes/users';
 import moviesRouter from './routes/movies';
 import { createUser, login, logout } from './controllers/auth';
 
-import NotFoundError from './errors/error-404-not-found';
-import BadRequestError from './errors/error-400-bad-request';
-import UnauthorizedError from './errors/error-401-unauthorized';
-import ForbiddenChangesError from './errors/error-403-forbidden';
-import UniqueFieldConflict from './errors/error-409-conflict';
-import InternalServerError from './errors/error-500-internal-server-error';
-
 import { requestLogger, errorLogger } from './middlewares/logger';
+import limiter from './middlewares/rate-limiter';
+import centralizedErrorsHandler from './middlewares/centralized-errors-handler';
 
 require('dotenv').config();
 
@@ -30,6 +25,9 @@ const runApp = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
+
+  // Ограничение количества запросов во временном промежутке
+  app.use(limiter);
 
   // Логер запросов до всех роутов
   app.use(requestLogger);
@@ -64,48 +62,14 @@ const runApp = () => {
   app.use(errors());
 
   // Мидлвар централизованной обработки ошибок
-  app.use((
-    err: Error | mongoose.Error | MongoServerError,
-    req: Request & { user?: string | JwtPayload },
-    res: Response,
-    next: NextFunction,
-  ) => {
-    console.log(err);
-    let statusCode;
-    let message;
-    if (err instanceof NotFoundError
-     || err instanceof BadRequestError
-     || err instanceof UnauthorizedError
-     || err instanceof ForbiddenChangesError) {
-      ({ statusCode, message } = err);
-    } else if (err instanceof mongoose.Error.CastError
-      || err instanceof mongoose.Error.ValidationError) {
-      statusCode = BadRequestError.DEFAULT_STATUS_CODE;
-      message = BadRequestError.DEFAULT_MESSAGE;
-    } else if (err.name === 'JsonWebTokenError') {
-      statusCode = UnauthorizedError.DEFAULT_STATUS_CODE;
-      message = 'Ошибка авторизации';
-    } else if (err instanceof MongoServerError && err.code === 11000) {
-      statusCode = UniqueFieldConflict.DEFAULT_STATUS_CODE;
-      message = UniqueFieldConflict.DEFAULT_MESSAGE;
-    } else {
-      statusCode = InternalServerError.DEFAULT_STATUS_CODE;
-      message = InternalServerError.DEFAULT_MESSAGE;
-    }
-    res
-      .status(statusCode)
-      .send({
-        message,
-      });
-    next();
-  });
+  app.use(centralizedErrorsHandler);
 
   app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
   });
 };
 
-// перед запуском приложения проверяется соединение с БД
+// Перед запуском приложения проверяется соединение с БД
 mongoose.connect('mongodb://root:example@localhost:27017/moviesdb?authSource=admin', (err) => {
   if (err) {
     console.error('FAILED TO CONNECT TO MONGODB');
