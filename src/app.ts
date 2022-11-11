@@ -1,15 +1,9 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import mongoose from 'mongoose';
-import { celebrate, errors, Joi } from 'celebrate';
-import { JwtPayload } from 'jsonwebtoken';
+import { errors } from 'celebrate';
 import cookieParser from 'cookie-parser';
-import { MongoServerError } from 'mongodb';
 
-import auth from './middlewares/auth';
-
-import usersRouter from './routes/users';
-import moviesRouter from './routes/movies';
-import { createUser, login, logout } from './controllers/auth';
+import generalRouter from './routes';
 
 import { requestLogger, errorLogger } from './middlewares/logger';
 import limiter from './middlewares/rate-limiter';
@@ -32,28 +26,8 @@ const runApp = () => {
   // Логер запросов до всех роутов
   app.use(requestLogger);
 
-  // Роуты регистрации и авторизации
-  app.post('/signup', celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required().min(4),
-      name: Joi.string().min(2).max(30),
-    }),
-  }), createUser);
-
-  app.post('/signin', celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required().min(4),
-    }),
-  }), login);
-
-  // Защита роутов авторизацией
-  app.use(auth);
-
-  app.use('/users', usersRouter);
-  app.use('/movies', moviesRouter);
-  app.post('/signout', logout);
+  // Подключение роутов
+  app.use('/', generalRouter);
 
   // Логер ошибок после роутов и до обработки ошибок
   app.use(errorLogger);
