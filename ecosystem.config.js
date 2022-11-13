@@ -19,7 +19,7 @@ module.exports = {
       repo: 'https://github.com/dariarus/movies-explorer-api',
       path: DEPLOY_PATH,
       ssh_options: 'StrictHostKeyChecking=no',
-      'pre-deploy-local': `mkdir ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/source/dist \
+      'pre-deploy-local': `mkdir ${DEPLOY_PATH}/source/dist \
         && scp ./.env* ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/source/dist`,
       'post-deploy': 'npm i && npm run build',
     },
