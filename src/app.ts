@@ -11,10 +11,12 @@ import centralizedErrorsHandler from './middlewares/centralized-errors-handler';
 
 require('dotenv').config();
 
-const { PORT = 3000 } = process.env;
+const { NODE_ENV, PORT = 3000 } = process.env;
 
 const runApp = () => {
   const app = express();
+
+  console.log(`Starting server with env: ${NODE_ENV}`);
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
