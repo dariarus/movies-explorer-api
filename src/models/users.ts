@@ -5,7 +5,7 @@ import { TUser } from '../services/types';
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    require: true,
     minlength: 2,
     maxlength: 30,
   },

@@ -4,6 +4,7 @@ import NotFoundError from '../errors/error-404-not-found';
 
 import Movie from '../models/movies';
 import ForbiddenChangesError from '../errors/error-403-forbidden';
+import BadRequestError from '../errors/error-400-bad-request';
 
 const NOT_FOUND_MESSAGE = 'Такой фильм не найден';
 
@@ -60,7 +61,13 @@ export const saveMovie = (
     .then((movie) => {
       res.send(movie);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError(err.message));
+      } else {
+        next(err);
+      }
+    });
 };
 
 // Удалить фильм из понравившихся (дизлайкнуть)
