@@ -23,6 +23,7 @@ function centralizedErrorsHandler(
     || err instanceof BadRequestError
     || err instanceof UnauthorizedError
     || err instanceof ForbiddenChangesError) {
+    console.log('зашли');
     ({ statusCode, message } = err);
   } else if (err instanceof mongoose.Error.CastError
     || err instanceof mongoose.Error.ValidationError) {
@@ -31,7 +32,9 @@ function centralizedErrorsHandler(
   } else if (err.name === 'JsonWebTokenError') {
     statusCode = UnauthorizedError.DEFAULT_STATUS_CODE;
     message = 'Ошибка авторизации';
-  } else if (err instanceof MongoServerError && err.code === 11000) {
+  } else if (err instanceof UniqueFieldConflict
+    || (err instanceof MongoServerError
+      && err.code === 11000)) {
     statusCode = UniqueFieldConflict.DEFAULT_STATUS_CODE;
     message = UniqueFieldConflict.DEFAULT_MESSAGE;
   } else {

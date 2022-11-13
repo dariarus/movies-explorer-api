@@ -4,8 +4,9 @@ import jwt from 'jsonwebtoken';
 
 import User from '../models/users';
 
-import NotFoundError from '../errors/error-404-not-found';
+import BadRequestError from '../errors/error-400-bad-request';
 import UnauthorizedError from '../errors/error-401-unauthorized';
+import UniqueFieldConflict from '../errors/error-409-conflict';
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -22,14 +23,25 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
       name,
     }))
     .then((user) => {
+      console.log('привет');
       res
+        .status(201)
         .send({
           email: user.email,
           name: user.name,
-        })
-        .redirect('/signin');
+        });
     })
-    .catch(next);
+    .catch((err) => {
+      // if (err === 'Bad Request') {
+      //   // next(new BadRequestError(err.message));
+      //   next(new BadRequestError());
+      // } else if (err.code === 11000) {
+      //   next(new UniqueFieldConflict('Пользователь с данным email уже существует'));
+      // } else {
+      console.log('тут');
+        next(err);
+      // }
+    });
 };
 
 // Войти в аккаунт (авторизация)
@@ -39,7 +51,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
   return User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        next(new NotFoundError('Пользователь не найден'));
+        next(new UnauthorizedError());
         return;
       }
 

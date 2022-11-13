@@ -16,7 +16,7 @@ export type TMovie = {
   trailerLink: string,
   thumbnail: string,
   owner: mongoose.ObjectId,
-  movieId: mongoose.ObjectId,
+  movieId: number,
   nameRU: string,
   nameEN: string,
 };

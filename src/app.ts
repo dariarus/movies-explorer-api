@@ -11,7 +11,7 @@ import centralizedErrorsHandler from './middlewares/centralized-errors-handler';
 
 require('dotenv').config();
 
-const { PORT = 3000 } = process.env;
+const { NODE_ENV, DATABASE_PATH, PORT = 3000 } = process.env;
 
 const runApp = () => {
   const app = express();
@@ -44,7 +44,7 @@ const runApp = () => {
 };
 
 // Перед запуском приложения проверяется соединение с БД
-mongoose.connect('mongodb://root:example@localhost:27017/moviesdb?authSource=admin', (err) => {
+mongoose.connect(`${DATABASE_PATH}`, (err) => {
   if (err) {
     console.error('FAILED TO CONNECT TO MONGODB');
     console.error(err);

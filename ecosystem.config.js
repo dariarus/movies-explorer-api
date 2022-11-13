@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 
-dotenv.config({ path: './.env.deploy' });
+dotenv.config({ path: './.env.production.deploy' });
 
 const {
   DEPLOY_USER, DEPLOY_HOST, DEPLOY_PATH, DEPLOY_REF = 'origin/diploma/level-1',
