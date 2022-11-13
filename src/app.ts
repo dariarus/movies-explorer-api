@@ -9,7 +9,7 @@ import { requestLogger, errorLogger } from './middlewares/logger';
 import limiter from './middlewares/rate-limiter';
 import centralizedErrorsHandler from './middlewares/centralized-errors-handler';
 
-require('dotenv').config();
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
 
 const { NODE_ENV, DATABASE_PATH, PORT = 3000 } = process.env;
 
