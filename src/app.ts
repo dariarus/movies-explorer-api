@@ -17,6 +17,7 @@ const runApp = () => {
   const app = express();
 
   console.log(`Starting server with env: ${NODE_ENV}`);
+  console.log(`Database Path: ${DATABASE_PATH}`);
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
