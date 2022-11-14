@@ -1,16 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+
 import UnauthorizedError from '../errors/error-401-unauthorized';
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+import { AUTHORIZATION_ERROR } from '../utils/request-messanges';
 
-const INCORRECT_TOKEN_MESSAGE = 'Ошибка авторизации';
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 function auth(req: Request & { user?: JwtPayload | string }, res: Response, next: NextFunction) {
   const token = req.cookies.jwt;
 
   if (!token) {
-    next(new UnauthorizedError(INCORRECT_TOKEN_MESSAGE));
+    next(new UnauthorizedError(AUTHORIZATION_ERROR));
     return;
   }
   let payload;

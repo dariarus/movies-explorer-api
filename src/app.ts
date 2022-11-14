@@ -9,7 +9,16 @@ import { requestLogger, errorLogger } from './middlewares/logger';
 import limiter from './middlewares/rate-limiter';
 import centralizedErrorsHandler from './middlewares/centralized-errors-handler';
 
-require('dotenv').config({ path: `.env.${process.env.NODE_ENV}` });
+console.log(process.env.NODE_ENV);
+
+let envPath;
+if (process.env.NODE_ENV) {
+  envPath = `./.env.${process.env.NODE_ENV}`;
+} else {
+  envPath = './.env';
+}
+
+require('dotenv').config({ path: envPath });
 
 const { NODE_ENV, DATABASE_PATH, PORT = 3000 } = process.env;
 
@@ -22,11 +31,11 @@ const runApp = () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
 
+  // Логер запросов до всех роутов и лимитера
+  app.use(requestLogger);
+
   // Ограничение количества запросов во временном промежутке
   app.use(limiter);
-
-  // Логер запросов до всех роутов
-  app.use(requestLogger);
 
   // Подключение роутов
   app.use('/', generalRouter);

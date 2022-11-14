@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
+
 import { TUser } from '../services/types';
+
+import { INCORRECT_EMAIL } from '../utils/request-messanges';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -15,7 +18,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     validate: {
       validator: (v: string) => validator.isEmail(v),
-      message: 'Неверный формат электронного адреса',
+      message: INCORRECT_EMAIL,
     },
   },
   password: {

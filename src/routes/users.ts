@@ -1,18 +1,13 @@
 import { Router } from 'express';
-import { celebrate, Joi } from 'celebrate';
+import { celebrate } from 'celebrate';
 
 import { getUser, updateUser } from '../controllers/users';
+import { userChangeReqValidation } from '../utils/validation';
 
 const router = Router();
 
 router.get('/me', getUser);
 
-router.patch('/me', celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    email: Joi.string().email(),
-    password: Joi.string(),
-  }),
-}), updateUser);
+router.patch('/me', celebrate(userChangeReqValidation), updateUser);
 
 export default router;

@@ -4,9 +4,10 @@ import jwt from 'jsonwebtoken';
 
 import User from '../models/users';
 
-import BadRequestError from '../errors/error-400-bad-request';
 import UnauthorizedError from '../errors/error-401-unauthorized';
 import UniqueFieldConflict from '../errors/error-409-conflict';
+
+import { LOGOUT_SUCCESS } from '../utils/request-messanges';
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -23,7 +24,6 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
       name,
     }))
     .then((user) => {
-      console.log('привет');
       res
         .status(201)
         .send({
@@ -32,15 +32,11 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
         });
     })
     .catch((err) => {
-      // if (err === 'Bad Request') {
-      //   // next(new BadRequestError(err.message));
-      //   next(new BadRequestError());
-      // } else if (err.code === 11000) {
-      //   next(new UniqueFieldConflict('Пользователь с данным email уже существует'));
-      // } else {
-      console.log('тут');
+      if (err.code === 11000) {
+        next(new UniqueFieldConflict());
+      } else {
         next(err);
-      // }
+      }
     });
 };
 
@@ -81,6 +77,5 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
 export const logout = (req: Request, res: Response) => {
   res
     .clearCookie('jwt')
-    .send('Успешный выход из аккаунта')
-    .redirect('/signin');
+    .send(LOGOUT_SUCCESS);
 };

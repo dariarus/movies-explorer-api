@@ -4,9 +4,8 @@ import NotFoundError from '../errors/error-404-not-found';
 
 import Movie from '../models/movies';
 import ForbiddenChangesError from '../errors/error-403-forbidden';
-import BadRequestError from '../errors/error-400-bad-request';
 
-const NOT_FOUND_MESSAGE = 'Такой фильм не найден';
+import { NOT_FOUND_MOVIE_MESSAGE } from '../utils/request-messanges';
 
 // Вернуть сохраненные пользователем фильмы
 export const getMovies = (
@@ -29,46 +28,13 @@ export const saveMovie = (
   req: Request & { user?: JwtPayload | string },
   res: Response,
   next: NextFunction,
-) => {
-  const {
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN,
-  } = req.body;
-
-  return Movie.create({
-    country,
-    director,
-    duration,
-    year,
-    description,
-    image,
-    trailerLink,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN,
-    owner: (req.user as JwtPayload)._id,
+) => Movie.create({ ...req.body, owner: (req.user as JwtPayload)._id })
+  .then((movie) => {
+    res.send(movie);
   })
-    .then((movie) => {
-      res.send(movie);
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError(err.message));
-      } else {
-        next(err);
-      }
-    });
-};
+  .catch((err) => {
+    next(err);
+  });
 
 // Удалить фильм из понравившихся (дизлайкнуть)
 export const unsaveMovie = (
@@ -79,7 +45,7 @@ export const unsaveMovie = (
   Movie.findById(req.params.id)
     .then((movie) => {
       if (!movie) {
-        next(new NotFoundError(NOT_FOUND_MESSAGE));
+        next(new NotFoundError(NOT_FOUND_MOVIE_MESSAGE));
         return;
       }
       if (String(movie.owner) !== (req.user as JwtPayload)._id) {

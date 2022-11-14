@@ -1,5 +1,5 @@
-import {NextFunction, Router} from 'express';
-import { celebrate, Joi } from 'celebrate';
+import { Router } from 'express';
+import { celebrate } from 'celebrate';
 
 import { createUser, login, logout } from '../controllers/auth';
 
@@ -7,26 +7,17 @@ import auth from '../middlewares/auth';
 
 import usersRouter from './users';
 import moviesRouter from './movies';
+
 import NotFoundError from '../errors/error-404-not-found';
+
+import { signinReqValidation, signupReqValidation } from '../utils/validation';
+import { NOT_FOUND_PAGE_MESSAGE } from '../utils/request-messanges';
 
 const generalRouter = Router();
 
-const NOT_FOUND_MESSAGE = 'Страница не найдена';
+generalRouter.post('/signup', celebrate(signupReqValidation), createUser);
 
-generalRouter.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-    name: Joi.string().required().min(2).max(30),
-  }),
-}), createUser);
-
-generalRouter.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
+generalRouter.post('/signin', celebrate(signinReqValidation), login);
 
 // Защита роутов авторизацией
 generalRouter.use(auth);
@@ -37,7 +28,7 @@ generalRouter.post('/signout', logout);
 
 // Обработка несуществующего роута
 generalRouter.all('*', () => {
-  throw new NotFoundError(NOT_FOUND_MESSAGE);
+  throw new NotFoundError(NOT_FOUND_PAGE_MESSAGE);
 });
 
 export default generalRouter;
