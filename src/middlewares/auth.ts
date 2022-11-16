@@ -4,8 +4,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import UnauthorizedError from '../errors/error-401-unauthorized';
 
 import { AUTHORIZATION_ERROR } from '../utils/request-messanges';
-
-const { NODE_ENV, JWT_SECRET } = process.env;
+import { jwtSecret } from '../../config';
 
 function auth(req: Request & { user?: JwtPayload | string }, res: Response, next: NextFunction) {
   const token = req.cookies.jwt;
@@ -17,7 +16,7 @@ function auth(req: Request & { user?: JwtPayload | string }, res: Response, next
   let payload;
 
   try {
-    payload = jwt.verify(token, NODE_ENV === 'production' ? `${JWT_SECRET}` : 'dev-secret');
+    payload = jwt.verify(token, `${jwtSecret}`);
   } catch (err) {
     next(err);
     return;

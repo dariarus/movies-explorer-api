@@ -15,9 +15,6 @@ export const getMovies = (
 ) => {
   Movie.find({ owner: (req.user as JwtPayload)._id })
     .then((movies) => {
-      if (!movies) {
-        res.send([]);
-      }
       res.send(movies);
     })
     .catch(next);

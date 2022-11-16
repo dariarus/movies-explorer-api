@@ -17,6 +17,4 @@ node_modules
 # Typescript build
 dist
 
-.env
-.env.deploy
-.env.*
+.env*
