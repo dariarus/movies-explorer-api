@@ -17,10 +17,10 @@ const runApp = () => {
 
   console.log(`Starting server with env: ${nodeEnv}`);
 
+  app.use(helmet());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
-  app.use(helmet());
 
   // Логер запросов до всех роутов и лимитера
   app.use(requestLogger);
