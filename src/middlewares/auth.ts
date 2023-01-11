@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import UnauthorizedError from '../errors/error-401-unauthorized';
 
 import { AUTHORIZATION_ERROR } from '../utils/request-messanges';
-import { jwtSecret } from '../../config';
+import { jwtSecret } from '../config';
 
 function auth(req: Request & { user?: JwtPayload | string }, res: Response, next: NextFunction) {
   const token = req.cookies.jwt;

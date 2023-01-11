@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import cors from 'cors';
 
-import { databasePath, nodeEnv, port } from '../config';
+import { databasePath, nodeEnv, port } from './config';
 
 import generalRouter from './routes';
 
