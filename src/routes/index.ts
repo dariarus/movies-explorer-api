@@ -23,7 +23,7 @@ generalRouter.post('/signin', celebrate(signinReqValidation), login);
 generalRouter.use(auth);
 
 generalRouter.use('/users', usersRouter);
-generalRouter.use('/movies', moviesRouter);
+generalRouter.use('movies', moviesRouter);
 generalRouter.post('/signout', logout);
 
 // Обработка несуществующего роута
