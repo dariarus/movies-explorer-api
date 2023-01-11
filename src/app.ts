@@ -18,9 +18,9 @@ const runApp = () => {
 
   console.log(`Starting server with env: ${nodeEnv}`);
 
-  // app.use(cors({
-  //   origin: '*',
-  // }));
+  app.use(cors({
+    origin: '*',
+  }));
   app.use(helmet());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
