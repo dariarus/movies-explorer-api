@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import cors from 'cors';
 
-import { databasePath, nodeEnv, port } from './config';
+import { databasePath, nodeEnv, port, frontendUrl } from './config';
 
 import generalRouter from './routes';
 
@@ -18,8 +18,10 @@ const runApp = () => {
 
   console.log(`Starting server with env: ${nodeEnv}`);
 
+  // TODO: добавить ссылку на фронт после его публикации в файл .env.production
   app.use(cors({
-    origin: '*',
+    origin: frontendUrl,
+    credentials: true,
   }));
   app.use(helmet());
   app.use(express.json());
