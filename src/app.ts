@@ -19,7 +19,10 @@ const runApp = () => {
   console.log(`Starting server with env: ${nodeEnv}`);
 
   // TODO: добавить ссылку на фронт после его публикации в файл .env.production
-  app.use(cors());
+  app.use(cors({
+    origin: frontendUrl,
+    credentials: true,
+  }));
   app.use(helmet());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
