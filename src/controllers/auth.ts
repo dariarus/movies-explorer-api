@@ -68,7 +68,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
               maxAge: 3600000 * 24, // токен действителен 24 часа
               httpOnly: true,
               // sameSite: true,
-              sameSite: false,
+              sameSite: 'none',
               secure: true,
             });
           res.send({ token });
