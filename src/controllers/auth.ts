@@ -24,11 +24,23 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
       name,
     }))
     .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? `${JWT_SECRET}` : 'dev-secret',
+        { expiresIn: '10d' },
+      );
       res
+        .cookie('jwt', token, {
+          maxAge: 3600000 * 24,
+          httpOnly: true,
+          sameSite: 'none',
+          secure: true,
+        })
         .status(201)
         .send({
           email: user.email,
           name: user.name,
+          token,
         });
     })
     .catch((err) => {
@@ -67,7 +79,6 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
             .cookie('jwt', token, {
               maxAge: 3600000 * 24, // токен действителен 24 часа
               httpOnly: true,
-              // sameSite: true,
               sameSite: 'none',
               secure: true,
             });
