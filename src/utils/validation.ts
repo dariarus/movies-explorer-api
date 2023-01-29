@@ -37,7 +37,7 @@ export const movieCreateReqValidation: SchemaOptions = {
     },
     trailerLink: Joi.string().required().custom(validateURL, 'custom URL validation'),
     thumbnail: Joi.string().required().custom(validateURL, 'custom URL validation'),
-    movieId: Joi.number().required(),
+    id: Joi.number().required(),
     nameRU: Joi.string().regex(NAME_RU_REGEX).required(),
     nameEN: Joi.string().regex(NAME_EN_REGEX).required(),
   }),

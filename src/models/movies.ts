@@ -63,7 +63,7 @@ const movieSchema = new mongoose.Schema({
     ref: 'user',
     require: true,
   },
-  movieId: {
+  id: {
     type: Number,
     required: true,
   },
@@ -71,7 +71,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     require: true,
     validate: {
-      validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU', {ignore: ' -:'}),
+      validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU', { ignore: ' -:' }),
       message: INCORRECT_RU_NAME,
     },
   },
