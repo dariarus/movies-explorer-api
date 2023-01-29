@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 
-import { TMovie } from '../services/types';
+import {TMovie} from '../services/types';
 
 import {
   MISSING_IMAGE_URL,
@@ -33,11 +33,13 @@ const movieSchema = new mongoose.Schema({
     require: true,
   },
   image: {
-    type: String,
-    require: true,
-    validate: {
-      validator: (val: string) => validator.isURL(val),
-      message: MISSING_POSTER_URL,
+    url: {
+      type: String,
+      require: true,
+      validate: {
+        validator: (val: string) => validator.isURL(val),
+        message: MISSING_POSTER_URL,
+      },
     },
   },
   trailerLink: {
@@ -69,7 +71,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     require: true,
     validate: {
-      validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU', { ignore: ' -:' }),
+      validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU', {ignore: ' -:'}),
       message: INCORRECT_RU_NAME,
     },
   },
@@ -77,7 +79,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     require: true,
     validate: {
-      validator: (val: string) => validator.isAlphanumeric(val, 'en-US', { ignore: ' -:' }),
+      validator: (val: string) => validator.isAlphanumeric(val, 'en-US', {ignore: ' -:'}),
       message: INCORRECT_EN_NAME,
     },
   },

@@ -89,6 +89,6 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
 
 export const logout = (req: Request, res: Response) => {
   res
-    .clearCookie('jwt', { maxAge: -1 })
+    .clearCookie('jwt', { expires: new Date(1) })
     .send(LOGOUT_SUCCESS);
 };
