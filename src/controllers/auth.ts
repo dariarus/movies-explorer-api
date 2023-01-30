@@ -89,6 +89,6 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
 
 export const logout = (req: Request, res: Response) => {
   res
-    .clearCookie('jwt', { expires: new Date(1) })
+    .clearCookie('jwt', { expires: new Date(1), sameSite: 'none', secure: true })
     .send({ message: LOGOUT_SUCCESS });
 };
