@@ -33,11 +33,13 @@ const movieSchema = new mongoose.Schema({
     require: true,
   },
   image: {
-    type: String,
-    require: true,
-    validate: {
-      validator: (val: string) => validator.isURL(val),
-      message: MISSING_POSTER_URL,
+    ur: {
+      type: String,
+      require: true,
+      validate: {
+        validator: (val: string) => validator.isURL(val),
+        message: MISSING_POSTER_URL,
+      },
     },
   },
   trailerLink: {
@@ -69,7 +71,8 @@ const movieSchema = new mongoose.Schema({
     type: String,
     require: true,
     validate: {
-      validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU' && 'en-US', { ignore: ' ,-:' }),
+      validator: (val: string) => validator.isAlphanumeric(val, undefined, { ignore: ' ,-:' }),
+      // locales: (val: string) => validator.isAlphanumericLocales(val),
       message: INCORRECT_RU_NAME,
     },
   },
@@ -77,7 +80,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     require: true,
     validate: {
-      validator: (val: string) => validator.isAlphanumeric(val, 'en-US', { ignore: ' -:' }),
+      validator: (val: string) => validator.isAlphanumeric(val, 'en-US', {ignore: ' ,-:'}),
       message: INCORRECT_EN_NAME,
     },
   },

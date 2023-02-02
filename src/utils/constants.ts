@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
+
 import validator from 'validator';
+// import isAlphanumericLocales from 'validator';
 
 import { INCORRECT_ID, INCORRECT_URL } from './request-messanges';
 
@@ -21,3 +23,5 @@ export const validateURL = (value: string) => {
   }
   return value;
 };
+
+export const locales = validator.isAlphanumericLocales;
