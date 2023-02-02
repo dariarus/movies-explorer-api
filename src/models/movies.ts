@@ -10,7 +10,6 @@ import {
   INCORRECT_RU_NAME,
   INCORRECT_EN_NAME,
 } from '../utils/request-messanges';
-import isAlphanumericLocales = validator.isAlphanumericLocales;
 
 const movieSchema = new mongoose.Schema({
   country: {
