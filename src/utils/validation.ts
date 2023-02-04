@@ -1,6 +1,6 @@
 import { Joi, SchemaOptions } from 'celebrate';
 import {
-  NAME_EN_REGEX, NAME_RU_REGEX, validateId, validateURL,
+  NAME_EN_REGEX, NAME_RU_REGEX, validateURL,
 } from './constants';
 
 export const signupReqValidation = {
@@ -43,8 +43,8 @@ export const movieCreateReqValidation: SchemaOptions = {
   }),
 };
 
-export const movieUnsaveReqValidation = {
+export const movieDeleteReqValidation = {
   params: Joi.object().keys({
-    id: Joi.string().custom(validateId, 'custom id validation'),
+    id: Joi.number().required(),
   }),
 };

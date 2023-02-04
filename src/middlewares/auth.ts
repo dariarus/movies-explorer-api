@@ -8,9 +8,6 @@ import { jwtSecret } from '../config';
 
 function auth(req: Request & { user?: JwtPayload | string }, res: Response, next: NextFunction) {
   const token = req.cookies.jwt;
-  // const token = req.headers.authorization;
-  console.log('req: ');
-  console.log(req.headers);
 
   if (!token) {
     next(new UnauthorizedError(AUTHORIZATION_ERROR));
