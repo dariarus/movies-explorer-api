@@ -6,7 +6,7 @@ const {
   NODE_ENV,
   DATABASE_PATH,
   JWT_SECRET,
-  // FRONTEND_URL,
+  FRONTEND_URL,
 } = process.env;
 
 export const port = 3000;
@@ -15,5 +15,4 @@ export const databasePath = DATABASE_PATH || 'mongodb://root:example@localhost:2
 export const jwtSecret = nodeEnv === 'local' ? 'dev-secret' : JWT_SECRET;
 
 // TODO: настроить ссылку на фронт в продакшне
-// export const frontendUrl = nodeEnv === 'local' ? 'http://localhost:3001' : FRONTEND_URL;
-export const frontendUrl = 'http://localhost:3001';
+export const frontendUrl = nodeEnv === 'local' ? 'http://localhost:3001' : FRONTEND_URL;
