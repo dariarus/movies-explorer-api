@@ -6,7 +6,7 @@ const {
   NODE_ENV,
   DATABASE_PATH,
   JWT_SECRET,
-  FRONTEND_URL,
+  // FRONTEND_URL,
 } = process.env;
 
 export const port = 3000;
