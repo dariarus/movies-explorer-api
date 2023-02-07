@@ -72,7 +72,6 @@ const movieSchema = new mongoose.Schema({
     require: true,
     validate: {
       validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU', { ignore: /[a-zA-Z\s,—&\-:.%"«»'!?]/g }),
-      // validator: (val: string) => validator.isAlphanumeric(val, 'ru-RU', { ignore: '-—&:.' }),
       message: INCORRECT_RU_NAME,
     },
   },
