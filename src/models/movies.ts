@@ -1,14 +1,12 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
 
-import {TMovie} from '../services/types';
+import { TMovie } from '../services/types';
 
 import {
   MISSING_IMAGE_URL,
   MISSING_POSTER_URL,
   MISSING_TRAILER_URL,
-  INCORRECT_RU_NAME,
-  INCORRECT_EN_NAME,
 } from '../utils/request-messanges';
 
 const movieSchema = new mongoose.Schema({
